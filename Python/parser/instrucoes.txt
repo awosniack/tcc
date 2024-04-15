@@ -1,0 +1,14 @@
+Erro relativo fórmula
+       |read - expected|
+er = -------------------- x 100
+          |expected|
+
+ignorar resultados com er < 2%
+
+localidade espacial
+quando diversos elementos estão corrompidos, mas não compartilham uma mesma posição em algum dos eixos = RANDOM
+quando elementos corrompidos compartilham uma, duas ou três dimensões dos eixos = LINHA, QUADRADO, CUBO respectivamente
+
+
+DGEMM
+er = 100% se er > 100%
