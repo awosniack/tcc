@@ -137,9 +137,10 @@ plt.figure(1)
 plt.scatter(x_scatter, y_scatter, marker='*', s=5)
 plt.xlabel('Número de elementos')
 plt.ylabel('Média erro relativo')
-plt.title('Titulo')
+plt.title('Erro relativo dos elementos')
 plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', 'Geral'))
 
+#Criando plot da classificacao
 plt.figure(2)
 plt.bar(ERROR_TYPE, ERRORS_COUNT)
 plt.ylabel("Número de ocorrências")
