@@ -33,6 +33,19 @@ def relative_error_100(r, e):
 def avg(v):
     return reduce(lambda a, b: a + b, v) / len(v)
 
+#cria pasta/subpastas se nao existe
+def createFolder(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+#troca valores do vetor por percentagens do valor total
+def fixArray(v):
+    total = sum(v)
+    new_v = []
+    for el in v:
+        new_v.append(round((el/total)*100))
+    return new_v
+
 for tempo in TEMPOS:
     for tamanho in TAMANHOS:
         ERRORS_COUNT = [0, 0, 0, 0]
@@ -151,13 +164,16 @@ for tempo in TEMPOS:
         plt.xlabel('Número de elementos')
         plt.ylabel('Média erro relativo')
         plt.title('Erro relativo dos elementos')
-        plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo + '_' + tamanho+'_Geral'))
+        createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral'))
+        plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral', tamanho))
 
         #Criando plot da classificacao
+        new_errors = fixArray(ERRORS_COUNT)
         plt.figure(newFigure())
-        plt.bar(ERROR_TYPE, ERRORS_COUNT)
-        plt.ylabel("Número de ocorrências")
+        plt.bar(ERROR_TYPE, new_errors)
+        plt.ylabel("% de ocorrências")
         plt.xlabel("Classificação")
         plt.title('Classificação dos erros')
-        addlabels(ERROR_TYPE, ERRORS_COUNT)
-        plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo + '_' + tamanho+ '_Classificacao'))
+        addlabels(ERROR_TYPE, new_errors)
+        createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao'))
+        plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao', tamanho))
