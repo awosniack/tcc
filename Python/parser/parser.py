@@ -68,6 +68,7 @@ for arq in ARQUIVOS:
     errors = [] # lista contendo listas com os erros relativos
     errors_filename = [] # nome do arquivo contendo ligacao entre o nome do arquivo e qual index da lista de erros
     errors_avg = [] # lista contendo a media dos errors
+    max_rel_errors = 0
     # print(len(filenames))
     for f in filenames:
         #abrindo e lendo arquivo
@@ -152,15 +153,23 @@ for arq in ARQUIVOS:
                         err_type += column_error
                     # print('Iteracao teve ' + str(err_count) + ' erros, classificados como ' + ERROR_TYPE[err_type] + '\n')
                     errors_filename.append(f)
+                    max_rel_errors = max_rel_errors if max_rel_errors > len(rel_error) else len(rel_error)
                     errors.append(rel_error)
                     errors_avg.append(avg(rel_error))
                     
     x_scatter = []
     y_scatter = []
+    count_elementos_incorretos = [0] * (max_rel_errors+1)
+    total_elementos_incorretos = 0
+    print("Size of list = " + str(len(count_elementos_incorretos)))
+    # for i in range(max_rel_errors):
+    #     count_elementos_incorretos[i] = 0
     for index, error in enumerate(errors):
         #print(str(len(error)) + ' erros no arquivo ' + errors_filename[index] + ' com avg erro relativo = ' + str(errors_avg[index]))
         
         x_scatter.append(len(error))
+        count_elementos_incorretos[len(error)] += 1
+        total_elementos_incorretos += 1
         y_scatter.append(errors_avg[index])
 
         x = []
@@ -169,6 +178,10 @@ for arq in ARQUIVOS:
             x.append(i)
             y.append(e)
 
+    print("modelo = " + tempo + tamanho)
+    for i in range(max_rel_errors+1):
+        if count_elementos_incorretos[i] > 0:
+            print("Tamanho " + str(i) + " apareceu " + str(count_elementos_incorretos[i]) + " vezes - " + str((count_elementos_incorretos[i]/total_elementos_incorretos)*100) + "%")
     # criando scatter plot de todos
     plt.figure(newFigure())
     plt.scatter(x_scatter, y_scatter, marker='*', s=5)
