@@ -174,7 +174,7 @@ for arq in ARQUIVOS:
     plt.scatter(x_scatter, y_scatter, marker='*', s=5)
     plt.xlabel('Número de elementos')
     plt.ylabel('Média erro relativo (%)')
-    plt.title('Erro relativo dos elementos')
+    # plt.title('Erro relativo dos elementos')
     createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral'))
     plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral', tamanho))
 
@@ -185,7 +185,7 @@ for arq in ARQUIVOS:
     plt.bar(ERROR_TYPE, new_errors)
     plt.ylabel("Número de ocorrências (%)")
     plt.xlabel("Classificação")
-    plt.title('Classificação dos erros')
+    # plt.title('Classificação dos erros')
     addlabels(ERROR_TYPE, new_errors)
     createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao'))
     plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao', tamanho))
