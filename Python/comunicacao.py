@@ -64,7 +64,7 @@ threadsToCreate = [
     userInputThreadDef,
     receiveMessageThreadDef,
     sendMessageThreadDef,
-    # pingThreadDef
+    pingThreadDef
 ]
 
 # Capturando o control C para encerrar tudo
