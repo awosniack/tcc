@@ -1,6 +1,0 @@
-#HEADER matrix_dim:2048 threads:4 block_size:16 block_offset:12 precision:Float
-#BEGIN Y:2023 M:11 D:01 Time:19:44:46
-#IT 0 KerTime:2.7069367 AccTime:2.7069367
-#IT 1 KerTime:2.6371014 AccTime:5.3440381
-#IT 2 KerTime:2.6870993 AccTime:8.0311374
-#IT 3 KerTime:2.5975383 AccTime:10.6286757
