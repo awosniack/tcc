@@ -1,0 +1,11 @@
+#HEADER matrix_dim:2048 threads:4 block_size:16 block_offset:12 precision:Float
+#BEGIN Y:2023 M:11 D:07 Time:09:17:09
+#IT 0 KerTime:2.6426765 AccTime:2.6426765
+#IT 1 KerTime:2.6731643 AccTime:5.3158408
+#ERR  p: [1178, 337], r: -5.7656844404029829e+34, e: -6.3868282827546582e+34
+#SDC Ite:2 KerTime:2.6731643 AccTime:5.3158408 KerErr:1 AccErr:1
+#IT 2 KerTime:2.7422803 AccTime:8.0581211
+#ERR  p: [1086, 176], r: -3.9539460707444125e+34, e: -2.2256322327452759e+34
+#SDC Ite:3 KerTime:2.7422803 AccTime:8.0581211 KerErr:1 AccErr:2
+#ABORT amount of errors equals of the last iteration
+#END
