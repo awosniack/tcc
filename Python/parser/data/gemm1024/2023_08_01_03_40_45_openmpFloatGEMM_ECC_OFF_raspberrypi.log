@@ -1,2 +1,0 @@
-#HEADER matrix_dim:1024 threads:4 block_size:4 block_offset:12 precision:Float
-#BEGIN Y:2023 M:08 D:01 Time:03:40:45

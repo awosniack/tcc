@@ -5,14 +5,26 @@ from functools import reduce
 import matplotlib.pyplot as plt
 
 ERROR_TYPE = ['Single', 'Random', 'Line', 'Square']
-ERRORS_COUNT = [0, 0, 0, 0]
+ERRORS_COUNT = [0, 0, 0, 0]     # vetor com a classificacao dos erros - [single, random, line, square]
 ARQUIVOS = [
-    {'tempo':'3segundos', 'tamanho':'backup4gb', 'chave':'#IT', 'chave2':' '},
-            {'tempo':'6segundos', 'tamanho':'backup4gb', 'chave':'#IT', 'chave2':' '},
-            {'tempo':'3segundos', 'tamanho':'backup8gb', 'chave':'#IT', 'chave2':' '},
-            {'tempo':'6segundos', 'tamanho':'backup8gb', 'chave':'#IT', 'chave2':' '},
-            {'tempo': 'hpc', 'tamanho':'DGEMM_XeonPhi', 'chave':'#SDC', 'chave2':'size:2048'},
-            {'tempo': 'hpc', 'tamanho':'DGEMM_K40', 'chave':'#SDC', 'chave2':'size:2048'}
+    
+    
+    # {'instabilidade':'old', 'tempo':'tempo', 'tamanho':'teste', 'chave':'#IT', 'chave2':' '},
+    
+    {'instabilidade':'alta', 'tempo':'3segundos', 'tamanho':'4gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'alta', 'tempo':'6segundos', 'tamanho':'4gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'alta', 'tempo':'3segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'alta', 'tempo':'6segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
+    {'instabilidade':'media', 'tempo':'3segundos', 'tamanho':'4gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'media', 'tempo':'6segundos', 'tamanho':'4gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'media', 'tempo':'3segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'media', 'tempo':'6segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
+    {'instabilidade':'baixa', 'tempo':'3segundos', 'tamanho':'4gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'baixa', 'tempo':'6segundos', 'tamanho':'4gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'baixa', 'tempo':'3segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
+            {'instabilidade':'baixa', 'tempo':'6segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
+    {'instabilidade':'resultados_daniel', 'tempo': 'DGEMM_XeonPhi', 'tamanho':'hpc', 'chave':'#SDC', 'chave2':'size:2048'},
+    {'instabilidade':'resultados_daniel', 'tempo': 'DGEMM_K40', 'tamanho':'hpc', 'chave':'#SDC', 'chave2':'size:2048'}
             ]
 FIGURE = 0
 def newFigure():
@@ -59,9 +71,10 @@ for arq in ARQUIVOS:
     tamanho = arq['tamanho']
     chave = arq['chave']
     chave2 = arq['chave2']
+    instabilidade = arq['instabilidade']
     ERRORS_COUNT = [0, 0, 0, 0]
-    file_location = os.path.join(os.path.realpath(os.path.dirname(__file__)), 'data',tempo,
-                                tamanho,
+    file_location = os.path.join(os.path.realpath(os.path.dirname(__file__)), 'data', instabilidade,
+                                tamanho,tempo,
                                     '*.log')
     filenames = glob.glob(file_location)
 
@@ -85,18 +98,19 @@ for arq in ARQUIVOS:
 
         rel_error = []
         considerar_erro = False
-        for line in data:
-            if chave in line:
-                considerar_erro = chave2 in line
+        for line in data: # para cada linha
+            if chave in line: # se tem #ERR
+                considerar_erro = chave2 in line # verificacao se o erro e do tamanho correto (compatibilidade daniel)
                 # print(line + ' - considerar_erro = '+ str(considerar_erro))
                 if err_count > 0:
                     if err_count > 1:
                         err_type += 1
                         err_type += line_error
                         err_type += column_error
-                    # print('Iteracao teve ' + str(err_count) + ' erros, classificados como ' + ERROR_TYPE[err_type] + '\n')
+                    # print('(LINE) Iteracao teve ' + str(err_count) + ' erros, classificados como ' + ERROR_TYPE[err_type] + '\n')
                     ERRORS_COUNT[err_type] += 1
                     errors_filename.append(f)
+                    max_rel_errors = max_rel_errors if max_rel_errors > len(rel_error) else len(rel_error)
                     errors.append(rel_error)
                     errors_avg.append(avg(rel_error))
 
@@ -142,30 +156,29 @@ for arq in ARQUIVOS:
                         column_error = True
                         debug_column_error = True
                     #-----------------------------------------------
-                    #print('Erro relativo de [' + (('|' + str(x) + '|') if debug_line_error else str(x)) + ', ' + (('|' + str(y) + '|') if debug_column_error else str(y)) + '] = ' + str(relative_error(r, e)))
+                    # print('Erro relativo de [' + (('|' + str(x) + '|') if debug_line_error else str(x)) + ', ' + (('|' + str(y) + '|') if debug_column_error else str(y)) + '] = ' + str(relative_error(r, e)))
                     rel_error.append(relative_error_100(r, e))
                 except:
                     print('Error reading file ' + f)
         if err_count > 0:
-                    if err_count > 1:
-                        err_type += 1
-                        err_type += line_error
-                        err_type += column_error
-                    # print('Iteracao teve ' + str(err_count) + ' erros, classificados como ' + ERROR_TYPE[err_type] + '\n')
-                    errors_filename.append(f)
-                    max_rel_errors = max_rel_errors if max_rel_errors > len(rel_error) else len(rel_error)
-                    errors.append(rel_error)
-                    errors_avg.append(avg(rel_error))
+            if err_count > 1:
+                err_type += 1
+                err_type += line_error
+                err_type += column_error
+            # print('(FILE) Iteracao teve ' + str(err_count) + ' erros, classificados como ' + ERROR_TYPE[err_type] + '\n')
+            ERRORS_COUNT[err_type] += 1
+            errors_filename.append(f)
+            max_rel_errors = max_rel_errors if max_rel_errors > len(rel_error) else len(rel_error)
+            errors.append(rel_error)
+            errors_avg.append(avg(rel_error))
                     
     x_scatter = []
     y_scatter = []
     count_elementos_incorretos = [0] * (max_rel_errors+1)
     total_elementos_incorretos = 0
-    print("Size of list = " + str(len(count_elementos_incorretos)))
-    # for i in range(max_rel_errors):
-    #     count_elementos_incorretos[i] = 0
+    # print("Size of list = " + str(len(count_elementos_incorretos)))
     for index, error in enumerate(errors):
-        #print(str(len(error)) + ' erros no arquivo ' + errors_filename[index] + ' com avg erro relativo = ' + str(errors_avg[index]))
+        # print(str(len(error)) + ' erros no arquivo ' + errors_filename[index] + ' com avg erro relativo = ' + str(errors_avg[index]))
         
         x_scatter.append(len(error))
         count_elementos_incorretos[len(error)] += 1
@@ -178,19 +191,20 @@ for arq in ARQUIVOS:
             x.append(i)
             y.append(e)
 
-    print("modelo = " + tempo + tamanho)
-    for i in range(max_rel_errors+1):
-        if count_elementos_incorretos[i] > 0:
-            print("Tamanho " + str(i) + " apareceu " + str(count_elementos_incorretos[i]) + " vezes - " + str((count_elementos_incorretos[i]/total_elementos_incorretos)*100) + "%")
+    print("modelo = " + tempo + tamanho + " com instabilidade " + instabilidade)
+    # for i in range(max_rel_errors+1):
+    #     if count_elementos_incorretos[i] > 0:
+    #         print("Tamanho " + str(i) + " apareceu " + str(count_elementos_incorretos[i]) + " vezes - " + str((count_elementos_incorretos[i]/total_elementos_incorretos)*100) + "%")
     # criando scatter plot de todos
     plt.figure(newFigure())
     plt.scatter(x_scatter, y_scatter, marker='*', s=5)
     plt.xlabel('Número de elementos')
     plt.ylabel('Média erro relativo (%)')
     # plt.title('Erro relativo dos elementos')
-    createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral'))
-    plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral', tamanho))
-
+    createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Geral'))
+    plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Geral', tempo))
+    plt.close()
+    
     #Criando plot da classificacao
     print(ERRORS_COUNT)
     new_errors = fixArray(ERRORS_COUNT)
@@ -200,5 +214,6 @@ for arq in ARQUIVOS:
     plt.xlabel("Classificação")
     # plt.title('Classificação dos erros')
     addlabels(ERROR_TYPE, new_errors)
-    createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao'))
-    plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao', tamanho))
+    createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Classificacao'))
+    plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Classificacao', tempo))
+    plt.close()
