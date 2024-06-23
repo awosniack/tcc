@@ -63,7 +63,10 @@ def fixArray(v):
         total = 1
     new_v = []
     for el in v:
+        # para trocar a precisao do arrendondamento 
+        # new_v.append(round((el/total)*100, 2))
         new_v.append(round((el/total)*100))
+    # print(str(sum(new_v)))
     return new_v
 
 for arq in ARQUIVOS:

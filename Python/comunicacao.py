@@ -60,6 +60,8 @@ pingThreadDef = {'tName': pingThreadName,
                 #           'maxTentativas': MAXIMO_TENTATIVAS
                 #           }
                  }
+
+# comentar uma thread da lista para ela nao ser criada
 threadsToCreate = [
     userInputThreadDef,
     receiveMessageThreadDef,
