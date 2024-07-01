@@ -18,10 +18,10 @@ do
     #esperar pelo tempo delay em max_performance
     sleep $DELAY
 
-    #SET PERFORMANCE MINIMUN
-    eval "sudo cpufreq-set -g conservative"
+    #SET PERFORMANCE LOW
+    eval "sudo cpufreq-set -g powersave"
 
-            #esperar pelo tempo delay em min_performance
+    #esperar pelo tempo delay em min_performance
     sleep $DELAY
 
 done

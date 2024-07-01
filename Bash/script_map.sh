@@ -156,7 +156,7 @@ if test $TENSAO -ne $ACABOU; then
     fi
 
 
-    log "REINICIAR AGORAAAAAAAAAAAAAAAAAAA"
+    log "REINICIANDO"
     sudo sed -i -e "/over_voltage=/ s/=.*/=${TENSAO}/" /boot/config.txt
     sudo sed -i -e "/arm_freq=/ s/=.*/=${CLOCK}/" /boot/config.txt
     

@@ -3,6 +3,7 @@ import os
 
 from functools import reduce
 import matplotlib.pyplot as plt
+plt.rcParams['font.size']=13
 
 ERROR_TYPE = ['Single', 'Random', 'Line', 'Square']
 ERRORS_COUNT = [0, 0, 0, 0]     # vetor com a classificacao dos erros - [single, random, line, square]
@@ -23,8 +24,8 @@ ARQUIVOS = [
             {'instabilidade':'baixa', 'tempo':'6segundos', 'tamanho':'4gb', 'chave':'#IT', 'chave2':' '},
             {'instabilidade':'baixa', 'tempo':'3segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
             {'instabilidade':'baixa', 'tempo':'6segundos', 'tamanho':'8gb', 'chave':'#IT', 'chave2':' '},
-    {'instabilidade':'resultados_daniel', 'tempo': 'DGEMM_XeonPhi', 'tamanho':'hpc', 'chave':'#SDC', 'chave2':'size:2048'},
-    {'instabilidade':'resultados_daniel', 'tempo': 'DGEMM_K40', 'tamanho':'hpc', 'chave':'#SDC', 'chave2':'size:2048'}
+    {'instabilidade':'DGEMM_XeonPhi', 'tempo': 'resultados_daniel', 'tamanho':'hpc', 'chave':'#SDC', 'chave2':'size:2048'},
+    {'instabilidade':'DGEMM_K40', 'tempo': 'resultados_daniel', 'tamanho':'hpc', 'chave':'#SDC', 'chave2':'size:2048'}
             ]
 FIGURE = 0
 def newFigure():
@@ -195,28 +196,38 @@ for arq in ARQUIVOS:
             y.append(e)
 
     print("modelo = " + tempo + tamanho + " com instabilidade " + instabilidade)
-    # for i in range(max_rel_errors+1):
-    #     if count_elementos_incorretos[i] > 0:
-    #         print("Tamanho " + str(i) + " apareceu " + str(count_elementos_incorretos[i]) + " vezes - " + str((count_elementos_incorretos[i]/total_elementos_incorretos)*100) + "%")
-    # criando scatter plot de todos
-    plt.figure(newFigure())
-    plt.scatter(x_scatter, y_scatter, marker='*', s=5)
-    plt.xlabel('Número de elementos')
-    plt.ylabel('Média erro relativo (%)')
-    # plt.title('Erro relativo dos elementos')
-    createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Geral'))
-    plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Geral', tempo))
-    plt.close()
+    for i in range(max_rel_errors+1):
+        if count_elementos_incorretos[i] > 0:
+            print("Tamanho " + str(i) + " apareceu " + str(count_elementos_incorretos[i]) + " vezes - " + str((count_elementos_incorretos[i]/total_elementos_incorretos)*100) + "%")
     
-    #Criando plot da classificacao
-    print(ERRORS_COUNT)
-    new_errors = fixArray(ERRORS_COUNT)
-    plt.figure(newFigure())
-    plt.bar(ERROR_TYPE, new_errors)
-    plt.ylabel("Número de ocorrências (%)")
-    plt.xlabel("Classificação")
-    # plt.title('Classificação dos erros')
-    addlabels(ERROR_TYPE, new_errors)
-    createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Classificacao'))
-    plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Classificacao', tempo))
-    plt.close()
+    if(total_elementos_incorretos > 0):
+        # criando scatter plot de todos
+        plt.figure(newFigure())
+        plt.scatter(x_scatter, y_scatter, marker='*', s=15)
+        plt.xlabel('Número de elementos')
+        plt.ylabel('Média erro relativo (%)')
+        # plt.title('Erro relativo dos elementos')
+
+        createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral'))
+        plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Geral',tamanho + "_" + instabilidade) + ".pdf",bbox_inches='tight')
+
+        # createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Geral'))
+        # plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Geral', tempo)+ ".pdf",bbox_inches='tight')
+        plt.close()
+        
+        #Criando plot da classificacao
+        print(ERRORS_COUNT)
+        new_errors = fixArray(ERRORS_COUNT)
+        plt.figure(newFigure())
+        plt.bar(ERROR_TYPE, new_errors)
+        plt.ylabel("Número de ocorrências (%)")
+        plt.xlabel("Classificação")
+        # plt.title('Classificação dos erros')
+        addlabels(ERROR_TYPE, new_errors)
+        # createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Classificacao'))
+        # plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', instabilidade, tamanho, 'Classificacao', tempo) + ".pdf",bbox_inches='tight')
+        
+        createFolder(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao'))
+        plt.savefig(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'figuras', tempo, 'Classificacao', tamanho + "_" + instabilidade) + ".pdf",bbox_inches='tight')
+        
+        plt.close()
