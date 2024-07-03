@@ -204,6 +204,8 @@ for arq in ARQUIVOS:
         # criando scatter plot de todos
         plt.figure(newFigure())
         plt.scatter(x_scatter, y_scatter, marker='*', s=15)
+        plt.ylim(0, 110)
+        plt.xlim(0, 550)
         plt.xlabel('Número de elementos')
         plt.ylabel('Média erro relativo (%)')
         # plt.title('Erro relativo dos elementos')
@@ -220,6 +222,7 @@ for arq in ARQUIVOS:
         new_errors = fixArray(ERRORS_COUNT)
         plt.figure(newFigure())
         plt.bar(ERROR_TYPE, new_errors)
+        plt.ylim(0, 110)
         plt.ylabel("Número de ocorrências (%)")
         plt.xlabel("Classificação")
         # plt.title('Classificação dos erros')
